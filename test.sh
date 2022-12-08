@@ -78,4 +78,35 @@ DOC
 )
 test_func $input $expected $no
 
+# 3
+no=3
+input='{"arrKey": []}'
+expected=$(
+    cat <<DOC
+
+   /**
+    * @return array
+    * @OA\Get(
+    *     path="xxx",
+    *     summary="SUMMARY",
+    *     description="DESCRIPTION",
+    *     @OA\Response(
+    *         response="200",
+    *         description="成功時",
+    *         @OA\JsonContent(
+    *             type="object",
+    *             @OA\Property(
+    *                 property="arrKey",
+    *                 type="array",
+    *                 @OA\Items(
+    *                 ),
+    *             ),
+    *         ),
+    *     ),
+    * );
+    */
+DOC
+)
+test_func $input $expected $no
+
 echo "OK"

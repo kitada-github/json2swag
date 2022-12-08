@@ -26,8 +26,7 @@ function main(): void {
     let contents: string = head;
     let indent = 3;    // 深さ
 
-    for (const key in obj) {
-        const property = key;
+    for (const property in obj) {
         const type = decideType(obj[property]);
 
         contents += "\n";
@@ -37,6 +36,12 @@ function main(): void {
         contents += "\n";
         contents += addSpace(`type="${type}",`, indent + 1);
         contents += "\n";
+        if (typeof (obj[property]) === 'object' && Array.isArray(obj[property])) {
+            contents += addSpace(String.raw`@OA\Items(`, indent + 1);
+            contents += "\n";
+            contents += addSpace(`),`, indent + 1);
+            contents += "\n";
+        }
         contents += addSpace('),', indent);
 
     }
@@ -68,6 +73,9 @@ function decideType(value: any): string {
             break;
         case 'boolean':
             res = 'bool';
+            break;
+        case 'object':
+            res = Array.isArray(value) ? 'array' : 'object';
             break;
         default:
             throw 'invalid type'
