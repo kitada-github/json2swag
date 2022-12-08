@@ -66,6 +66,9 @@ function decideType(value: any): string {
         case 'number':
             res = 'integer';
             break;
+        case 'boolean':
+            res = 'bool';
+            break;
         default:
             throw 'invalid type'
     }
