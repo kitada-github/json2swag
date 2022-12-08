@@ -9,7 +9,7 @@ function test_func() {
         #echo "expected: $expected"
         #echo "output: $output"
         diff <(echo "$expected") <(echo "$output")
-        exit 1
+        echo "output: $output"
     fi
 }
 
@@ -80,7 +80,7 @@ test_func $input $expected $no
 
 # 3
 no=3
-input='{"arrKey": []}'
+input='{"arrKara": [], "arrInt": [1, 2, 3]}'
 expected=$(
     cat <<DOC
 
@@ -96,9 +96,16 @@ expected=$(
     *         @OA\JsonContent(
     *             type="object",
     *             @OA\Property(
-    *                 property="arrKey",
+    *                 property="arrKara",
     *                 type="array",
     *                 @OA\Items(
+    *                 ),
+    *             ),
+    *             @OA\Property(
+    *                 property="arrInt",
+    *                 type="array",
+    *                 @OA\Items(
+    *                     type="integer",
     *                 ),
     *             ),
     *         ),

@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { parse } from 'path';
 
 const head = String.raw`
    /**
@@ -26,30 +27,42 @@ function main(): void {
     let contents: string = head;
     let indent = 3;    // 深さ
 
-    for (const property in obj) {
-        const type = decideType(obj[property]);
-
-        contents += "\n";
-        contents += addSpace(String.raw`@OA\Property(`, indent);
-        contents += "\n";
-        contents += addSpace(`property="${property}",`, indent + 1);
-        contents += "\n";
-        contents += addSpace(`type="${type}",`, indent + 1);
-        contents += "\n";
-        if (typeof (obj[property]) === 'object' && Array.isArray(obj[property])) {
-            contents += addSpace(String.raw`@OA\Items(`, indent + 1);
-            contents += "\n";
-            contents += addSpace(`),`, indent + 1);
-            contents += "\n";
-        }
-        contents += addSpace('),', indent);
-
+    for(const property in obj){
+        contents += parseJson(property, obj[property], indent);
     }
 
     contents += foot;
 
-
     console.log(contents);
+}
+
+function parseJson(property: string, value: any, indent: number): string {
+    let contents = '';
+    const type = decideType(value);
+
+    contents += "\n";
+    contents += addSpace(String.raw`@OA\Property(`, indent)  + "\n";
+    contents += addSpace(`property="${property}",`, indent + 1) + "\n";
+    contents += addSpace(`type="${type}",`, indent + 1) + "\n";
+
+    if (type === 'array') {
+        contents += addSpace(String.raw`@OA\Items(`, indent + 1);
+        contents += "\n";
+        if (value.length > 0) {
+            contents += addSpace(`type="${decideType(value[0])}",`, indent + 2);
+            contents += "\n";
+        }
+        contents += addSpace(`),`, indent + 1);
+        contents += "\n";
+
+    } else if (type === 'object') {
+        for (const childProp in value) {
+            contents += parseJson(childProp, value[childProp], indent + 1);
+            contents += "\n";
+        }
+    }
+    contents += addSpace('),', indent);
+    return contents;
 }
 
 function addSpace(str: string, indent: number): string {
