@@ -43,7 +43,7 @@ test_func $input $expected $no
 
 # 2
 no=2
-input='{"key": "value"}'
+input='{"key1": "string_v", "key2": 1}'
 expected=$(
     cat <<DOC
 
@@ -59,8 +59,12 @@ expected=$(
     *         @OA\JsonContent(
     *             type="object",
     *             @OA\Property(
-    *                 property="key",
+    *                 property="key1",
     *                 type="string",
+    *             ),
+    *             @OA\Property(
+    *                 property="key2",
+    *                 type="integer",
     *             ),
     *         ),
     *     ),

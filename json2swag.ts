@@ -28,7 +28,7 @@ function main(): void {
 
     for (const key in obj) {
         const property = key;
-        const type = 'string';
+        const type = decideType(obj[property]);
 
         contents += "\n";
         contents += addSpace(String.raw`@OA\Property(`, indent);
@@ -55,6 +55,21 @@ function addSpace(str: string, indent: number): string {
     const space = '    * ' + s;
 
     return space + str;
+}
+
+function decideType(value: any): string {
+    let res = '';
+    switch (typeof (value)) {
+        case 'string':
+            res = 'string';
+            break;
+        case 'number':
+            res = 'integer';
+            break;
+        default:
+            throw 'invalid type'
+    }
+    return res;
 }
 
 
