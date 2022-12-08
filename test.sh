@@ -11,9 +11,31 @@ function test_func() {
     fi
 }
 
+# トランスパイル
+tsc json2swag.ts
+
 # 1
-input='[1, 2, 3]'
-expected='[ 1, 2, 3 ]'
+input='{}'
+expected=`cat << DOC
+
+   /**
+    * @return array
+    * @OA\Get(
+    *      path="xxx",
+    *      summary="SUMMARY",
+    *      description="DESCRIPTION",
+    *      @OA\Response(
+    *          response="200",
+    *          description="成功時",
+    *          @OA\JsonContent(
+    *              type="object",
+    *          ),
+    *      ),
+    * );
+    */
+DOC
+`
+
 test_func $input $expected
 
 echo "OK"
