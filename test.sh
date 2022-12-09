@@ -9,6 +9,7 @@ function test_func() {
         #echo "expected: $expected"
         #echo "output: $output"
         diff <(echo "$expected") <(echo "$output")
+        echo "input: $input"
         echo "output: $output"
     fi
 }
@@ -80,7 +81,7 @@ test_func $input $expected $no
 
 # 3
 no=3
-input='{"arrKara": [], "arrInt": [1, 2, 3]}'
+input='{"arrKara": [], "arrInt": [1, 2, 3], "arrObj": [{"ik": 100}]}'
 expected=$(
     cat <<DOC
 
@@ -106,6 +107,16 @@ expected=$(
     *                 type="array",
     *                 @OA\Items(
     *                     type="integer",
+    *                 ),
+    *             ),
+    *             @OA\Property(
+    *                 property="arrObj",
+    *                 type="array",
+    *                 @OA\Items(
+    *                     @OA\Property(
+    *                         property="ik",
+    *                         type="integer",
+    *                     ),
     *                 ),
     *             ),
     *         ),

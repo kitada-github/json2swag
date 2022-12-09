@@ -27,7 +27,7 @@ function main(): void {
     let contents: string = head;
     let indent = 3;    // 深さ
 
-    for(const property in obj){
+    for (const property in obj) {
         contents += parseJson(property, obj[property], indent);
     }
 
@@ -41,15 +41,27 @@ function parseJson(property: string, value: any, indent: number): string {
     const type = decideType(value);
 
     contents += "\n";
-    contents += addSpace(String.raw`@OA\Property(`, indent)  + "\n";
-    contents += addSpace(`property="${property}",`, indent + 1) + "\n";
+    contents += addSpace(String.raw`@OA\Property(`, indent) + "\n";
+    if (property === '') {
+    } else {
+        contents += addSpace(`property="${property}",`, indent + 1) + "\n";
+    }
     contents += addSpace(`type="${type}",`, indent + 1) + "\n";
 
     if (type === 'array') {
         contents += addSpace(String.raw`@OA\Items(`, indent + 1);
-        contents += "\n";
         if (value.length > 0) {
-            contents += addSpace(`type="${decideType(value[0])}",`, indent + 2);
+            if (decideType(value[0]) === 'object') {
+                for (const property in value[0]) {
+                    contents += parseJson(property, value[0][property], indent + 2);
+                }
+                contents += "\n";
+            } else {
+                contents += "\n";
+                contents += addSpace(`type="${decideType(value[0])}",`, indent + 2);
+                contents += "\n";
+            }
+        } else {
             contents += "\n";
         }
         contents += addSpace(`),`, indent + 1);
