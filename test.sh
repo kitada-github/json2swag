@@ -1,3 +1,4 @@
+result=0
 function test_func() {
     input=$1
     expected=$2
@@ -11,6 +12,7 @@ function test_func() {
         diff <(echo "$expected") <(echo "$output")
         echo "input: $input"
         echo "output: $output"
+        $result=1
     fi
 }
 
@@ -176,7 +178,6 @@ DOC
 )
 test_func $input $expected $no
 
-
 # 4
 no=4
 input=$(
@@ -253,3 +254,7 @@ expected=$(
 DOC
 )
 test_func $input $expected $no
+
+if [ $result -eq 0 ]; then
+    echo "OK"
+fi

@@ -57,19 +57,20 @@ function parseJson(property: string, value: any, requireProp: boolean, indent: n
     if (type === 'array') {
         contents += indentText(String.raw`@OA\Items(`, indent + 1);
         if (value.length > 0) {
-            if (decideType(value[0]) === 'object') {
-                for (const property in value[0]) {
+            const first = value[0];
+            if (decideType(first) === 'object') {
+                for (const property in first) {
                     contents += "\n";
-                    contents += parseJson(property, value[0][property], true, indent + 2);
+                    contents += parseJson(property, first[property], true, indent + 2);
                 }
                 contents += "\n";
-            } else if (decideType(value[0]) === 'array') {
+            } else if (decideType(first) === 'array') {
                 // array の場合はネストが1段浅くなる
                 contents += "\n";
-                contents += parseJson('', value[0], false, indent + 1);
+                contents += parseJson('', first, false, indent + 1);
             } else {
                 contents += "\n";
-                contents += indentText(`type="${decideType(value[0])}",`, indent + 2) + "\n";
+                contents += indentText(`type="${decideType(first)}",`, indent + 2) + "\n";
                 contents += indentText(description, indent + 2) + "\n";
             }
         } else {
