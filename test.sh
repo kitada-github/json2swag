@@ -168,8 +168,14 @@ input=$(
     cat <<DOC
 {
     "obj": {
-        "k1": "string",
-        "k2": 111
+        "k1_1": "string",
+        "k1_2": 111
+    },
+    "obj2": {
+        "obj2_obj":{
+            "k2_1": "hoge",
+            "k2_2": s222
+        }
     }
 }
 DOC
@@ -193,12 +199,28 @@ expected=$(
     *                 property="obj",
     *                 type="object",
     *                 @OA\Property(
-    *                     property="k1",
+    *                     property="k1_1",
     *                     type="string",
     *                 ),
     *                 @OA\Property(
-    *                     property="k2",
+    *                     property="k1_2",
     *                     type="integer",
+    *                 ),
+    *             ),
+    *             @OA\Property(
+    *                 property="obj2",
+    *                 type="object",
+    *                 @OA\Property(
+    *                     property="obj2_obj",
+    *                     type="object",
+    *                     @OA\Property(
+    *                         property="k2_1",
+    *                         type="string",
+    *                     ),
+    *                     @OA\Property(
+    *                         property="k2_2",
+    *                         type="integer",
+    *                     ),
     *                 ),
     *             ),
     *         ),
