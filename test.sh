@@ -12,7 +12,7 @@ function test_func() {
         diff <(echo "$expected") <(echo "$output")
         echo "input: $input"
         echo "output: $output"
-        $result=1
+        result=1
     fi
 }
 
