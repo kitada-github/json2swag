@@ -38,7 +38,7 @@ function main(): void {
         }
     } else if (type === 'array') {
         contents += "\n";
-        contents += parseArray(obj, indent-1);
+        contents += parseArray(obj, indent - 1);
     } else {
         throw 'invalid top type'
     }
@@ -68,13 +68,12 @@ function parseArray(array: any, indent: number): string {
             contents += indentText(`type="${decideType(first)}",`, indent + 2) + "\n";
             contents += indentText(description, indent + 2) + "\n";
         }
+        contents += indentText(`),`, indent + 1);
     } else {
         // 配列要素なし
-        contents += "\n";
+        contents += '\n';
+        contents += indentText(`),`, indent + 1);
     }
-    contents += indentText(`),`, indent + 1);
-
-
     return contents;
 }
 
@@ -93,30 +92,8 @@ function parseJson(property: string, value: any, requireProp: boolean, indent: n
     contents += indentText(description, indent + 1) + "\n";
 
     if (type === 'array') {
-        contents += indentText(String.raw`@OA\Items(`, indent + 1);
-        if (value.length > 0) {
-            const first = value[0];
-            if (decideType(first) === 'object') {
-                for (const property in first) {
-                    contents += "\n";
-                    contents += parseJson(property, first[property], true, indent + 2);
-                }
-                contents += "\n";
-            } else if (decideType(first) === 'array') {
-                // array の場合はネストが1段浅くなる
-                contents += "\n";
-                contents += parseJson('', first, false, indent + 1);
-            } else {
-                contents += "\n";
-                contents += indentText(`type="${decideType(first)}",`, indent + 2) + "\n";
-                contents += indentText(description, indent + 2) + "\n";
-            }
-        } else {
-            // 配列要素なし
-            contents += "\n";
-        }
-        contents += indentText(`),`, indent + 1);
-        contents += "\n";
+        contents += parseArray(value, indent);
+        contents += '\n';
 
     } else if (type === 'object') {
         for (const childProp in value) {
