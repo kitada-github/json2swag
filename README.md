@@ -2,6 +2,16 @@
 
 JSON を Swagger-PHP アノテーションに変換する CLI スクリプト
 
+## description
+
+```
+Usage: json2swag [options]
+
+Options:
+  -a, --attr <attributes>  アトリビュート指定(get/schema) (default: "get")
+  -h, --help               display help for command
+```
+
 ## Requirement
 
 * Node.js
