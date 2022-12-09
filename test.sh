@@ -81,7 +81,7 @@ test_func $input $expected $no
 
 # 3
 no=3
-input='{"arrKara": [], "arrInt": [1, 2, 3], "arrObj": [{"ik": 100}]}'
+input='{"arrKara": [], "arrInt": [1, 2, 3], "arrObj": [{"ik": 100, "sk": "hoge"}]}'
 expected=$(
     cat <<DOC
 
@@ -116,6 +116,10 @@ expected=$(
     *                     @OA\Property(
     *                         property="ik",
     *                         type="integer",
+    *                     ),
+    *                     @OA\Property(
+    *                         property="sk",
+    *                         type="string",
     *                     ),
     *                 ),
     *             ),
