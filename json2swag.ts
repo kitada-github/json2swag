@@ -29,7 +29,7 @@ function main(): void {
     let contents: string = head;
     let indent = 3;    // 深さ
 
-    contents += addSpace(description, indent);
+    contents += indentText(description, indent);
     for (const property in obj) {
         contents += "\n";
         contents += parseJson(property, obj[property], true, indent);
@@ -45,17 +45,17 @@ function parseJson(property: string, value: any, requireProp: boolean, indent: n
     const type = decideType(value);
 
     if (requireProp) {
-        contents += addSpace(String.raw`@OA\Property(`, indent) + "\n";
+        contents += indentText(String.raw`@OA\Property(`, indent) + "\n";
 
     }
     if (property !== '') {
-        contents += addSpace(`property="${property}",`, indent + 1) + "\n";
+        contents += indentText(`property="${property}",`, indent + 1) + "\n";
     }
-    contents += addSpace(`type="${type}",`, indent + 1) + "\n";
-    contents += addSpace(description, indent + 1) + "\n";
+    contents += indentText(`type="${type}",`, indent + 1) + "\n";
+    contents += indentText(description, indent + 1) + "\n";
 
     if (type === 'array') {
-        contents += addSpace(String.raw`@OA\Items(`, indent + 1);
+        contents += indentText(String.raw`@OA\Items(`, indent + 1);
         if (value.length > 0) {
             if (decideType(value[0]) === 'object') {
                 for (const property in value[0]) {
@@ -69,14 +69,14 @@ function parseJson(property: string, value: any, requireProp: boolean, indent: n
                 contents += parseJson('', value[0], false, indent + 1);
             } else {
                 contents += "\n";
-                contents += addSpace(`type="${decideType(value[0])}",`, indent + 2) + "\n";
-                contents += addSpace(description, indent + 2) + "\n";
+                contents += indentText(`type="${decideType(value[0])}",`, indent + 2) + "\n";
+                contents += indentText(description, indent + 2) + "\n";
             }
         } else {
             // 配列要素なし
             contents += "\n";
         }
-        contents += addSpace(`),`, indent + 1);
+        contents += indentText(`),`, indent + 1);
         contents += "\n";
 
     } else if (type === 'object') {
@@ -86,12 +86,12 @@ function parseJson(property: string, value: any, requireProp: boolean, indent: n
         }
     }
     if (requireProp) {
-        contents += addSpace('),', indent);
+        contents += indentText('),', indent);
     }
     return contents;
 }
 
-function addSpace(str: string, indent: number): string {
+function indentText(str: string, indent: number): string {
     let s = '';
     for (let i = 0; i < indent; i++) {
         s += '    ';
