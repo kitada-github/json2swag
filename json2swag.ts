@@ -26,9 +26,10 @@ function main(): void {
     const obj = JSON.parse(input);
     let contents: string = head;
     let indent = 3;    // 深さ
+    const propHead = addSpace(String.raw`@OA\Property(`, indent) + "\n";
 
     for (const property in obj) {
-        contents += parseJson(property, obj[property], indent);
+        contents += parseJson(property, obj[property], propHead, indent);
     }
 
     contents += foot;
@@ -36,12 +37,12 @@ function main(): void {
     console.log(contents);
 }
 
-function parseJson(property: string, value: any, indent: number): string {
+function parseJson(property: string, value: any, propHead: string, indent: number): string {
     let contents = '';
     const type = decideType(value);
 
     contents += "\n";
-    contents += addSpace(String.raw`@OA\Property(`, indent) + "\n";
+    contents += propHead;
     if (property !== '') {
         contents += addSpace(`property="${property}",`, indent + 1) + "\n";
     }
@@ -52,9 +53,13 @@ function parseJson(property: string, value: any, indent: number): string {
         if (value.length > 0) {
             if (decideType(value[0]) === 'object') {
                 for (const property in value[0]) {
-                    contents += parseJson(property, value[0][property], indent + 2);
+                    const h = addSpace(String.raw`@OA\Property(`, indent + 2) + "\n";
+                    contents += parseJson(property, value[0][property], h, indent + 2);
                 }
                 contents += "\n";
+            } else if (decideType(value[0]) === 'array') {
+                // array の場合はネストが1段浅くなる
+                contents += parseJson('', value[0], '', indent + 1);
             } else {
                 contents += "\n";
                 contents += addSpace(`type="${decideType(value[0])}",`, indent + 2);
@@ -69,11 +74,14 @@ function parseJson(property: string, value: any, indent: number): string {
 
     } else if (type === 'object') {
         for (const childProp in value) {
-            contents += parseJson(childProp, value[childProp], indent + 1);
+            const h = addSpace(String.raw`@OA\Property(`, indent + 1) + "\n";
+            contents += parseJson(childProp, value[childProp], h, indent + 1);
             contents += "\n";
         }
     }
-    contents += addSpace('),', indent);
+    if(propHead !== ''){
+        contents += addSpace('),', indent);
+    }
     return contents;
 }
 

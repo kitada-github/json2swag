@@ -81,7 +81,27 @@ test_func $input $expected $no
 
 # 3
 no=3
-input='{"arrKara": [], "arrInt": [1, 2, 3], "arrObj": [{"ik": 100, "sk": "hoge"}]}'
+input=$(
+    cat <<DOC
+{
+    "arrKara": [],
+    "arrInt": [1, 2, 3],
+    "arrObj": [
+        {
+            "ik": 100,
+            "sk": "hoge"
+        }
+    ],
+    "arrNest": [
+        [
+            100,
+            200
+        ]
+    ]
+}
+DOC
+)
+
 expected=$(
     cat <<DOC
 
@@ -123,6 +143,16 @@ expected=$(
     *                     ),
     *                 ),
     *             ),
+    *             @OA\Property(
+    *                 property="arrNest",
+    *                 type="array",
+    *                 @OA\Items(
+    *                     type="array",
+    *                     @OA\Items(
+    *                         type="integer",
+    *                     ),
+    *                 ),
+    *             ),
     *         ),
     *     ),
     * );
@@ -131,4 +161,3 @@ DOC
 )
 test_func $input $expected $no
 
-echo "OK"
