@@ -34,6 +34,7 @@ expected=$(
     *         description="成功時",
     *         @OA\JsonContent(
     *             type="object",
+    *             description="DESCRIPTION",
     *         ),
     *     ),
     * );
@@ -59,17 +60,21 @@ expected=$(
     *         description="成功時",
     *         @OA\JsonContent(
     *             type="object",
+    *             description="DESCRIPTION",
     *             @OA\Property(
     *                 property="stringKey",
     *                 type="string",
+    *                 description="DESCRIPTION",
     *             ),
     *             @OA\Property(
     *                 property="numberKey",
     *                 type="integer",
+    *                 description="DESCRIPTION",
     *             ),
     *             @OA\Property(
     *                 property="boolKey",
     *                 type="bool",
+    *                 description="DESCRIPTION",
     *             ),
     *         ),
     *     ),
@@ -116,40 +121,50 @@ expected=$(
     *         description="成功時",
     *         @OA\JsonContent(
     *             type="object",
+    *             description="DESCRIPTION",
     *             @OA\Property(
     *                 property="arrKara",
     *                 type="array",
+    *                 description="DESCRIPTION",
     *                 @OA\Items(
     *                 ),
     *             ),
     *             @OA\Property(
     *                 property="arrInt",
     *                 type="array",
+    *                 description="DESCRIPTION",
     *                 @OA\Items(
     *                     type="integer",
+    *                     description="DESCRIPTION",
     *                 ),
     *             ),
     *             @OA\Property(
     *                 property="arrObj",
     *                 type="array",
+    *                 description="DESCRIPTION",
     *                 @OA\Items(
     *                     @OA\Property(
     *                         property="ik",
     *                         type="integer",
+    *                         description="DESCRIPTION",
     *                     ),
     *                     @OA\Property(
     *                         property="sk",
     *                         type="string",
+    *                         description="DESCRIPTION",
     *                     ),
     *                 ),
     *             ),
     *             @OA\Property(
     *                 property="arrNest",
     *                 type="array",
+    *                 description="DESCRIPTION",
     *                 @OA\Items(
     *                     type="array",
+    *                     description="DESCRIPTION",
     *                     @OA\Items(
     *                         type="integer",
+    *                         description="DESCRIPTION",
     *                     ),
     *                 ),
     *             ),
@@ -195,31 +210,39 @@ expected=$(
     *         description="成功時",
     *         @OA\JsonContent(
     *             type="object",
+    *             description="DESCRIPTION",
     *             @OA\Property(
     *                 property="obj",
     *                 type="object",
+    *                 description="DESCRIPTION",
     *                 @OA\Property(
     *                     property="k1_1",
     *                     type="string",
+    *                     description="DESCRIPTION",
     *                 ),
     *                 @OA\Property(
     *                     property="k1_2",
     *                     type="integer",
+    *                     description="DESCRIPTION",
     *                 ),
     *             ),
     *             @OA\Property(
     *                 property="obj2",
     *                 type="object",
+    *                 description="DESCRIPTION",
     *                 @OA\Property(
     *                     property="obj2_obj",
     *                     type="object",
+    *                     description="DESCRIPTION",
     *                     @OA\Property(
     *                         property="k2_1",
     *                         type="string",
+    *                         description="DESCRIPTION",
     *                     ),
     *                     @OA\Property(
     *                         property="k2_2",
     *                         type="integer",
+    *                         description="DESCRIPTION",
     *                     ),
     *                 ),
     *             ),

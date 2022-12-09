@@ -11,7 +11,8 @@ const head = String.raw`
     *         response="200",
     *         description="成功時",
     *         @OA\JsonContent(
-    *             type="object",`;
+    *             type="object",
+`;
 
 const foot = String.raw`
     *         ),
@@ -20,12 +21,15 @@ const foot = String.raw`
     */
 `;
 
+const description = `description="DESCRIPTION",`;
+
 function main(): void {
     const input = fs.readFileSync("/dev/stdin", "utf8");
     const obj = JSON.parse(input);
     let contents: string = head;
     let indent = 3;    // 深さ
 
+    contents += addSpace(description, indent);
     for (const property in obj) {
         contents += "\n";
         contents += parseJson(property, obj[property], true, indent);
@@ -48,6 +52,7 @@ function parseJson(property: string, value: any, requireProp: boolean, indent: n
         contents += addSpace(`property="${property}",`, indent + 1) + "\n";
     }
     contents += addSpace(`type="${type}",`, indent + 1) + "\n";
+    contents += addSpace(description, indent + 1) + "\n";
 
     if (type === 'array') {
         contents += addSpace(String.raw`@OA\Items(`, indent + 1);
@@ -64,8 +69,8 @@ function parseJson(property: string, value: any, requireProp: boolean, indent: n
                 contents += parseJson('', value[0], false, indent + 1);
             } else {
                 contents += "\n";
-                contents += addSpace(`type="${decideType(value[0])}",`, indent + 2);
-                contents += "\n";
+                contents += addSpace(`type="${decideType(value[0])}",`, indent + 2) + "\n";
+                contents += addSpace(description, indent + 2) + "\n";
             }
         } else {
             // 配列要素なし
