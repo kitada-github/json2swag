@@ -259,7 +259,16 @@ test_func $input $expected $no
 no=5
 input=$(
     cat <<DOC
-[]
+[
+    {
+        "xxx": 123,
+        "yyy": "hoge"
+    },
+    {
+        "xxx": 789,
+        "yyy": "fuga"
+    }
+]
 DOC
 )
 
@@ -276,9 +285,19 @@ expected=$(
     *         response="200",
     *         description="成功時",
     *         @OA\JsonContent(
-    *             type="object",
+    *             type="array",
     *             description="DESCRIPTION",
     *             @OA\Items(
+    *                 @OA\Property(
+    *                     property="xxx",
+    *                     type="integer",
+    *                     description="DESCRIPTION",
+    *                 ),
+    *                 @OA\Property(
+    *                     property="yyy",
+    *                     type="string",
+    *                     description="DESCRIPTION",
+    *                 ),
     *             ),
     *         ),
     *     ),

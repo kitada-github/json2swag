@@ -11,7 +11,6 @@ const head = String.raw`
     *         response="200",
     *         description="成功時",
     *         @OA\JsonContent(
-    *             type="object",
 `;
 
 const foot = String.raw`
@@ -29,14 +28,17 @@ function main(): void {
     let contents: string = head;
     let indent = 3;    // 深さ
 
-    contents += indentText(description, indent);
     const type = decideType(obj);
     if (type === 'object') {
+        contents += indentText('type="object",',  indent) + '\n';
+        contents += indentText(description, indent);
         for (const property in obj) {
             contents += "\n";
             contents += parseJson(property, obj[property], true, indent);
         }
     } else if (type === 'array') {
+        contents += indentText('type="array",',  indent) + '\n';
+        contents += indentText(description, indent);
         contents += "\n";
         contents += parseArray(obj, indent - 1);
     } else {
