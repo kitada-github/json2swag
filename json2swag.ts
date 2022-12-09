@@ -30,14 +30,52 @@ function main(): void {
     let indent = 3;    // 深さ
 
     contents += indentText(description, indent);
-    for (const property in obj) {
+    const type = decideType(obj);
+    if (type === 'object') {
+        for (const property in obj) {
+            contents += "\n";
+            contents += parseJson(property, obj[property], true, indent);
+        }
+    } else if (type === 'array') {
         contents += "\n";
-        contents += parseJson(property, obj[property], true, indent);
+        contents += parseArray(obj, indent-1);
+    } else {
+        throw 'invalid top type'
     }
 
     contents += foot;
 
     console.log(contents);
+}
+
+function parseArray(array: any, indent: number): string {
+    let contents = '';
+    contents += indentText(String.raw`@OA\Items(`, indent + 1);
+    if (array.length > 0) {
+        const first = array[0];
+        if (decideType(first) === 'object') {
+            for (const property in first) {
+                contents += "\n";
+                contents += parseJson(property, first[property], true, indent + 2);
+            }
+            contents += "\n";
+        } else if (decideType(first) === 'array') {
+            // array の場合はネストが1段浅くなる
+            contents += "\n";
+            contents += parseJson('', first, false, indent + 1);
+        } else {
+            contents += "\n";
+            contents += indentText(`type="${decideType(first)}",`, indent + 2) + "\n";
+            contents += indentText(description, indent + 2) + "\n";
+        }
+    } else {
+        // 配列要素なし
+        contents += "\n";
+    }
+    contents += indentText(`),`, indent + 1);
+
+
+    return contents;
 }
 
 function parseJson(property: string, value: any, requireProp: boolean, indent: number): string {
