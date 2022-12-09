@@ -42,8 +42,7 @@ function parseJson(property: string, value: any, indent: number): string {
 
     contents += "\n";
     contents += addSpace(String.raw`@OA\Property(`, indent) + "\n";
-    if (property === '') {
-    } else {
+    if (property !== '') {
         contents += addSpace(`property="${property}",`, indent + 1) + "\n";
     }
     contents += addSpace(`type="${type}",`, indent + 1) + "\n";
@@ -62,6 +61,7 @@ function parseJson(property: string, value: any, indent: number): string {
                 contents += "\n";
             }
         } else {
+            // 配列要素なし
             contents += "\n";
         }
         contents += addSpace(`),`, indent + 1);
