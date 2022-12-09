@@ -28,6 +28,7 @@ function main(): void {
     let indent = 3;    // 深さ
 
     for (const property in obj) {
+        contents += "\n";
         contents += parseJson(property, obj[property], true, indent);
     }
 
@@ -39,8 +40,6 @@ function main(): void {
 function parseJson(property: string, value: any, requireProp: boolean, indent: number): string {
     let contents = '';
     const type = decideType(value);
-
-    contents += "\n";
 
     if (requireProp) {
         contents += addSpace(String.raw`@OA\Property(`, indent) + "\n";
@@ -56,11 +55,13 @@ function parseJson(property: string, value: any, requireProp: boolean, indent: n
         if (value.length > 0) {
             if (decideType(value[0]) === 'object') {
                 for (const property in value[0]) {
+                    contents += "\n";
                     contents += parseJson(property, value[0][property], true, indent + 2);
                 }
                 contents += "\n";
             } else if (decideType(value[0]) === 'array') {
                 // array の場合はネストが1段浅くなる
+                contents += "\n";
                 contents += parseJson('', value[0], false, indent + 1);
             } else {
                 contents += "\n";

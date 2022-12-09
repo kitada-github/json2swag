@@ -161,3 +161,50 @@ DOC
 )
 test_func $input $expected $no
 
+
+# 4
+no=4
+input=$(
+    cat <<DOC
+{
+    "obj": {
+        "k1": "string",
+        "k2": 111
+    }
+}
+DOC
+)
+
+expected=$(
+    cat <<DOC
+
+   /**
+    * @return array
+    * @OA\Get(
+    *     path="xxx",
+    *     summary="SUMMARY",
+    *     description="DESCRIPTION",
+    *     @OA\Response(
+    *         response="200",
+    *         description="成功時",
+    *         @OA\JsonContent(
+    *             type="object",
+    *             @OA\Property(
+    *                 property="obj",
+    *                 type="object",
+    *                 @OA\Property(
+    *                     property="k1",
+    *                     type="string",
+    *                 ),
+    *                 @OA\Property(
+    *                     property="k2",
+    *                     type="integer",
+    *                 ),
+    *             ),
+    *         ),
+    *     ),
+    * );
+    */
+DOC
+)
+test_func $input $expected $no
