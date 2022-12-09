@@ -1,6 +1,7 @@
 import * as fs from 'fs';
+import { program } from 'commander';
 
-const head = String.raw`
+const getHead = String.raw`
    /**
     * @return array
     * @OA\Get(
@@ -13,31 +14,68 @@ const head = String.raw`
     *         @OA\JsonContent(
 `;
 
-const foot = String.raw`
+const getFoot = String.raw`
     *         ),
     *     ),
     * );
     */
 `;
 
+const schemaHead = String.raw`
+   /**
+    * @OA\Schema(
+    *     schema="SCHEMA",
+`;
+
+const schemaFoot = String.raw`
+    * );
+    */
+`;
+
+
 const description = `description="DESCRIPTION",`;
 
 function main(): void {
+
+    // コマンドラインオプション処理
+    program.option("-a, --attr <attributes>", 'アトリビュート指定(get/schema)', 'get');
+    program.parse();
+    const options = program.opts();
+
+    let head = '';
+    let foot = '';
+    let indent = 3;    // 深さ
+    switch (options.attr) {
+        case 'get':
+            head = getHead;
+            foot = getFoot;
+            indent = 3;
+            break;
+        case 'schema':
+            head = schemaHead;
+            foot = schemaFoot;
+            indent = 2;
+            break;
+        default:
+            throw `invalid attr : ${options.attr}`;
+            break;
+    }
+
+    // JSON パース
     const input = fs.readFileSync("/dev/stdin", "utf8");
     const obj = JSON.parse(input);
     let contents: string = head;
-    let indent = 3;    // 深さ
 
     const type = decideType(obj);
     if (type === 'object') {
-        contents += indentText('type="object",',  indent) + '\n';
+        contents += indentText('type="object",', indent) + '\n';
         contents += indentText(description, indent);
         for (const property in obj) {
             contents += "\n";
             contents += parseJson(property, obj[property], true, indent);
         }
     } else if (type === 'array') {
-        contents += indentText('type="array",',  indent) + '\n';
+        contents += indentText('type="array",', indent) + '\n';
         contents += indentText(description, indent);
         contents += "\n";
         contents += parseArray(obj, indent - 1);
