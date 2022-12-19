@@ -62,7 +62,13 @@ function main(): void {
     }
 
     // JSON パース
-    const input = fs.readFileSync("/dev/stdin", "utf8");
+    let input = '';
+    try {
+        input = fs.readFileSync("/dev/stdin", "utf8");
+    } catch (e) {
+        console.log('標準入力でJSONを入力してください');
+        process.exit(1);
+    }
     const obj = JSON.parse(input);
     let contents: string = head;
 

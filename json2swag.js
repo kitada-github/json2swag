@@ -35,7 +35,14 @@ function main() {
             break;
     }
     // JSON パース
-    var input = fs.readFileSync("/dev/stdin", "utf8");
+    var input = '';
+    try {
+        input = fs.readFileSync("/dev/stdin", "utf8");
+    }
+    catch (e) {
+        console.log('標準入力でJSONを入力してください');
+        process.exit(1);
+    }
     var obj = JSON.parse(input);
     var contents = head;
     var type = decideType(obj);
