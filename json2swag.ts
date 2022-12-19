@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import { program } from 'commander';
+import { format } from 'util';
 
 const getHead = String.raw`
    /**
@@ -34,6 +35,7 @@ const schemaFoot = String.raw`
 
 
 const description = `description="DESCRIPTION",`;
+const example = `example="%s",`;
 
 function main(): void {
 
@@ -120,6 +122,7 @@ function parseArray(array: any, indent: number): string {
             contents += "\n";
             contents += indentText(`type="${decideType(first)}",`, indent + 2) + "\n";
             contents += indentText(description, indent + 2) + "\n";
+            contents += indentText(format(example, first), indent + 2) + "\n";
         }
         contents += indentText(`),`, indent + 1);
     } else {
@@ -153,7 +156,10 @@ function parseJson(property: string, value: any, requireProp: boolean, indent: n
             contents += parseJson(childProp, value[childProp], true, indent + 1);
             contents += "\n";
         }
+    } else {
+        contents += indentText(format(example, value), indent + 1) + "\n";
     }
+
     if (requireProp) {
         contents += indentText('),', indent);
     }

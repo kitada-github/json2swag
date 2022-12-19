@@ -6,11 +6,13 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
 exports.__esModule = true;
 var fs = require("fs");
 var commander_1 = require("commander");
+var util_1 = require("util");
 var getHead = String.raw(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n   /**\n    * @return array\n    * @OAGet(\n    *     path=\"xxx\",\n    *     summary=\"SUMMARY\",\n    *     description=\"DESCRIPTION\",\n    *     @OAResponse(\n    *         response=\"200\",\n    *         description=\"\u6210\u529F\u6642\",\n    *         @OAJsonContent(\n"], ["\n   /**\n    * @return array\n    * @OA\\Get(\n    *     path=\"xxx\",\n    *     summary=\"SUMMARY\",\n    *     description=\"DESCRIPTION\",\n    *     @OA\\Response(\n    *         response=\"200\",\n    *         description=\"\u6210\u529F\u6642\",\n    *         @OA\\JsonContent(\n"])));
 var getFoot = String.raw(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n    *         ),\n    *     ),\n    * );\n    */\n"], ["\n    *         ),\n    *     ),\n    * );\n    */\n"])));
 var schemaHead = String.raw(templateObject_3 || (templateObject_3 = __makeTemplateObject(["\n   /**\n    * @OASchema(\n    *     schema=\"SCHEMA\",\n"], ["\n   /**\n    * @OA\\Schema(\n    *     schema=\"SCHEMA\",\n"])));
 var schemaFoot = String.raw(templateObject_4 || (templateObject_4 = __makeTemplateObject(["\n    * );\n    */\n"], ["\n    * );\n    */\n"])));
 var description = "description=\"DESCRIPTION\",";
+var example = "example=\"%s\",";
 function main() {
     // コマンドラインオプション処理
     commander_1.program.option("-a, --attr <attributes>", 'アトリビュート指定(get/schema)', 'get');
@@ -92,6 +94,7 @@ function parseArray(array, indent) {
             contents += "\n";
             contents += indentText("type=\"".concat(decideType(first), "\","), indent + 2) + "\n";
             contents += indentText(description, indent + 2) + "\n";
+            contents += indentText((0, util_1.format)(example, first), indent + 2) + "\n";
         }
         contents += indentText("),", indent + 1);
     }
@@ -122,6 +125,9 @@ function parseJson(property, value, requireProp, indent) {
             contents += parseJson(childProp, value[childProp], true, indent + 1);
             contents += "\n";
         }
+    }
+    else {
+        contents += indentText((0, util_1.format)(example, value), indent + 1) + "\n";
     }
     if (requireProp) {
         contents += indentText('),', indent);
