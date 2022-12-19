@@ -28,7 +28,7 @@ function main() {
         case 'schema':
             head = schemaHead;
             foot = schemaFoot;
-            indent = 2;
+            indent = 1;
             break;
         default:
             throw "invalid attr : ".concat(options.attr);
