@@ -41,25 +41,7 @@ function main(): void {
     program.option("-a, --attr <attributes>", 'アトリビュート指定(get/schema)', 'get');
     program.parse();
     const options = program.opts();
-
-    let head = '';
-    let foot = '';
-    let indent = 3;    // 深さ
-    switch (options.attr) {
-        case 'get':
-            head = getHead;
-            foot = getFoot;
-            indent = 3;
-            break;
-        case 'schema':
-            head = schemaHead;
-            foot = schemaFoot;
-            indent = 1;
-            break;
-        default:
-            throw `invalid attr : ${options.attr}`;
-            break;
-    }
+    const [head, foot, indent] = setConfig(options.attr);
 
     // JSON パース
     let input = '';
@@ -70,8 +52,9 @@ function main(): void {
         process.exit(1);
     }
     const obj = JSON.parse(input);
-    let contents: string = head;
 
+    // ドキュメント生成
+    let contents: string = head;
     const type = decideType(obj);
     if (type === 'object') {
         contents += indentText('type="object",', indent) + '\n';
@@ -92,6 +75,30 @@ function main(): void {
     contents += foot;
 
     console.log(contents);
+}
+
+function setConfig(attr: string): [string, string, number] {
+
+    let head = '';
+    let foot = '';
+    let indent = 3;    // 深さ
+    switch (attr) {
+        case 'get':
+            head = getHead;
+            foot = getFoot;
+            indent = 3;
+            break;
+        case 'schema':
+            head = schemaHead;
+            foot = schemaFoot;
+            indent = 1;
+            break;
+        default:
+            throw `invalid attr : ${attr}`;
+            break;
+    }
+
+    return [head, foot, indent];
 }
 
 function parseArray(array: any, indent: number): string {

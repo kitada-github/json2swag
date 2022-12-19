@@ -16,24 +16,7 @@ function main() {
     commander_1.program.option("-a, --attr <attributes>", 'アトリビュート指定(get/schema)', 'get');
     commander_1.program.parse();
     var options = commander_1.program.opts();
-    var head = '';
-    var foot = '';
-    var indent = 3; // 深さ
-    switch (options.attr) {
-        case 'get':
-            head = getHead;
-            foot = getFoot;
-            indent = 3;
-            break;
-        case 'schema':
-            head = schemaHead;
-            foot = schemaFoot;
-            indent = 1;
-            break;
-        default:
-            throw "invalid attr : ".concat(options.attr);
-            break;
-    }
+    var _a = setConfig(options.attr), head = _a[0], foot = _a[1], indent = _a[2];
     // JSON パース
     var input = '';
     try {
@@ -44,6 +27,7 @@ function main() {
         process.exit(1);
     }
     var obj = JSON.parse(input);
+    // ドキュメント生成
     var contents = head;
     var type = decideType(obj);
     if (type === 'object') {
@@ -65,6 +49,27 @@ function main() {
     }
     contents += foot;
     console.log(contents);
+}
+function setConfig(attr) {
+    var head = '';
+    var foot = '';
+    var indent = 3; // 深さ
+    switch (attr) {
+        case 'get':
+            head = getHead;
+            foot = getFoot;
+            indent = 3;
+            break;
+        case 'schema':
+            head = schemaHead;
+            foot = schemaFoot;
+            indent = 1;
+            break;
+        default:
+            throw "invalid attr : ".concat(attr);
+            break;
+    }
+    return [head, foot, indent];
 }
 function parseArray(array, indent) {
     var contents = '';
